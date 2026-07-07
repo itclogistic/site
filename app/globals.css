@@ -1,0 +1,283 @@
+:root {
+  --ink: #14201a;
+  --muted: #5b6b62;
+  --green: #007a3d;
+  --green-dark: #005c2e;
+  --green-tint: #e7f3ec;
+  --border: #e3e1da;
+  --dark: #07191e;
+  --mint: #6fcfac;
+  --amber: #ffc24b;
+  --bg: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--green);
+  color: #ffffff;
+}
+
+.heading-font {
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+
+@keyframes spinWheel {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes roadMove {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 22px 0;
+  }
+}
+@keyframes truckBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.5px);
+  }
+}
+@keyframes headlightPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+@keyframes beltMove {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes wheelHint {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(12px);
+    opacity: 0.2;
+  }
+}
+
+/* ---------- shared interactive primitives (replace prototype's style-hover) ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 11px 22px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.15s ease, background 0.2s, border-color 0.2s, color 0.2s;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary {
+  background: var(--green);
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 122, 61, 0.28);
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  background: var(--green-dark);
+}
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: #ffffff;
+  transition: border-color 0.2s, box-shadow 0.25s;
+}
+.card:hover {
+  border-color: var(--green);
+  box-shadow: 0 18px 44px rgba(0, 122, 61, 0.1);
+}
+
+.nav-truck-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 13px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  transition: color 0.2s, background 0.2s;
+}
+.nav-truck-link:hover {
+  color: #ffffff;
+}
+.nav-truck-link.active {
+  color: var(--amber) !important;
+  background: rgba(255, 194, 75, 0.16) !important;
+}
+
+.footer-link {
+  color: #ffffff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  transition: border-color 0.2s;
+}
+.footer-link:hover {
+  border-color: var(--mint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-truck,
+  .anim-wheel,
+  .anim-road,
+  .anim-belt {
+    animation: none !important;
+  }
+}
+
+/* ---------- responsive layout utilities ---------- */
+/* Below 900px: truck-nav illustration doesn't fit alongside logo + lang
+   switch + CTA, and multi-column grids get cramped, so everything below
+   this breakpoint stacks to one column and the nav switches to a hamburger. */
+
+.grid-2,
+.grid-3,
+.grid-4,
+.split-cols {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 32px;
+}
+
+.nav-desktop-only,
+.nav-desktop-group {
+  display: none;
+}
+.nav-mobile-toggle {
+  display: inline-flex;
+}
+.step-connector {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .split-cols {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+  .nav-desktop-only {
+    display: contents;
+  }
+  .nav-desktop-group {
+    display: flex;
+  }
+  .nav-mobile-toggle {
+    display: none;
+  }
+  .step-connector {
+    display: block;
+  }
+}
+
+/* hero overlay cards: fixed left-only positioning would overflow narrow
+   viewports since they size to content, not to the sticky header's width */
+@media (max-width: 640px) {
+  .hero-card {
+    left: 20px !important;
+    right: 20px !important;
+    max-width: none !important;
+  }
+}
+
+/* secondary hero chrome (trust chips, scroll hint) — dropped on small
+   screens to keep the hero card readable without crowding */
+.hero-extra {
+  display: none;
+}
+@media (min-width: 640px) {
+  .hero-extra {
+    display: flex;
+  }
+}
+
+/* full-screen mobile nav panel, toggled by the hamburger button in Nav.tsx */
+.mobile-menu-panel {
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  width: 100vw;
+  z-index: 80;
+  background: var(--dark);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 100px 28px 40px;
+  gap: 8px;
+}
+.mobile-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+@media (min-width: 900px) {
+  .mobile-menu-panel {
+    display: none !important;
+  }
+}
